@@ -7,15 +7,12 @@ import Button from "../components/common/Button";
 import Loader from "../components/common/Loader";
 
 import { loginUser } from "../features/auth/authThunk";
-import { clearError } from "../features/auth/authSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error, user } = useSelector(
-    (state) => state.auth
-  );
+  const { loading, user } = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -28,13 +25,6 @@ const Login = () => {
       navigate("/");
     }
   }, [user, navigate]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-      dispatch(clearError());
-    }
-  }, [error, dispatch]);
 
   const handleChange = (e) => {
     setFormData({
@@ -78,24 +68,20 @@ const Login = () => {
   return (
     <section className="flex min-h-[85vh] items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md rounded-[2rem] border border-orange-100 bg-white/90 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.07)] backdrop-blur md:p-8">
-
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-black tracking-tight text-zinc-950">
             Welcome Back
           </h1>
-
           <p className="mt-1 text-sm text-zinc-500">
             Login to manage your orders and track delivery.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
           <div>
             <label className="mb-1.5 block text-xs font-bold uppercase tracking-[0.2em] text-zinc-700">
               Email Address
             </label>
-
             <input
               type="email"
               name="email"
@@ -111,7 +97,6 @@ const Login = () => {
             <label className="mb-1.5 block text-xs font-bold uppercase tracking-[0.2em] text-zinc-700">
               Password
             </label>
-
             <input
               type="password"
               name="password"
@@ -141,7 +126,6 @@ const Login = () => {
             Create an account
           </Link>
         </p>
-
       </div>
     </section>
   );

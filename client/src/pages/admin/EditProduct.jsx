@@ -35,7 +35,7 @@ const EditProduct = () => {
       toast.success("Product updated successfully");
       navigate("/admin/products");
     } catch (err) {
-      toast.error(err || "Failed to update product");
+      // Interceptor handle karega, yahan toast hat gaya hai.
     }
   };
 
@@ -50,7 +50,6 @@ const EditProduct = () => {
   return (
     <AdminLayout>
       <div className="max-w-4xl mx-auto py-6">
-        {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-black tracking-tight text-zinc-950">
             Edit Product
@@ -60,7 +59,6 @@ const EditProduct = () => {
           </p>
         </div>
 
-        {/* Form Card */}
         <div className="rounded-2xl border border-zinc-200/60 bg-white p-6 shadow-xl md:p-8">
           <ProductForm
             initialData={product}
