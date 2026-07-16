@@ -93,7 +93,9 @@ const user = await User.findOne({ email }).select("+password");
    res.cookie("token", token, {
       httpOnly: true,
       secure: true,      
-      sameSite: "none",   
+      sameSite: "none", 
+      domain: ".vercel.app",
+      path: "/",  
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
