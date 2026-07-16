@@ -15,10 +15,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin: ["http://localhost:3000",
-    "https://premium-kids-toys-ecommerce-saurabh-singhs-projects-4cbb1c3b.vercel.app"], 
+  origin: ["http://localhost:5173", "https://premium-kids-toys-ecommerce.vercel.app"], // Dono URLs allow kar do
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  credentials: true // Session/Cookie ke liye zaroori hai
 }));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/products", require("./routes/productRoutes"));
