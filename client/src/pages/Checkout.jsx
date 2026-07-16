@@ -23,13 +23,13 @@ const Checkout = () => {
   const subtotal = cartItems.reduce((acc, item) => acc + (item.offerPrice || item.price) * item.quantity, 0);
 
   useEffect(() => {
-    // 1. Agar cart empty hai toh wapas bhejo
+    
     if (cartItems.length === 0) {
       navigate("/cart", { replace: true });
       return;
     }
 
-    // 2. Stock check karo
+    
     const outOfStockItems = cartItems.filter(item => item.quantity > item.stock);
     if (outOfStockItems.length > 0) {
       outOfStockItems.forEach(item => {
@@ -42,16 +42,16 @@ const Checkout = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Form validation check
+   
     if (!formData.fullName || !formData.address || !formData.phone) {
       toast.error("Please fill all fields");
       return;
     }
 
-    // Redux mein address save karo
+    
     dispatch(saveShippingAddress(formData));
     
-    // Payment page par bhejo
+    
     navigate("/payment");
   };
 

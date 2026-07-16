@@ -8,7 +8,7 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Create Razorpay Order
+
 exports.createRazorpayOrder = async (req, res) => {
   try {
     const { orderItems } = req.body;
@@ -24,7 +24,6 @@ if (!product) {
   });
 }
 
-// ✅ NEW CHECK
 if (item.quantity > product.stock) {
   return res.status(400).json({
     message: `${product.name} has only ${product.stock} item(s) left in stock.`,
@@ -70,7 +69,7 @@ exports.verifyPaymentAndCreateOrder = async (req, res) => {
       shippingAddress,
     } = req.body;
 
-    // Verify Razorpay Signature
+    
     const generatedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
@@ -85,9 +84,7 @@ exports.verifyPaymentAndCreateOrder = async (req, res) => {
     let itemsPrice = 0;
     const finalOrderItems = [];
 
-    // ==========================
-    // CHECK STOCK ONLY
-    // ==========================
+   
     for (const item of orderItems) {
       const product = await Product.findById(item.product);
 
@@ -116,16 +113,12 @@ exports.verifyPaymentAndCreateOrder = async (req, res) => {
       });
     }
 
-    // ==========================
-    // PRICE
-    // ==========================
+   
     const shippingPrice = itemsPrice > 1000 ? 0 : 100;
     const taxPrice = Number((itemsPrice * 0.18).toFixed(2));
     const totalPrice = itemsPrice + shippingPrice + taxPrice;
 
-    // ==========================
-    // CREATE ORDER
-    // ==========================
+    
     const order = await Order.create({
       user: req.user._id,
 
@@ -148,9 +141,7 @@ exports.verifyPaymentAndCreateOrder = async (req, res) => {
       paidAt: new Date(),
     });
 
-    // ==========================
-    // REDUCE STOCK
-    // ==========================
+    
     for (const item of orderItems) {
       await Product.findByIdAndUpdate(item.product, {
         $inc: {
@@ -166,7 +157,7 @@ exports.verifyPaymentAndCreateOrder = async (req, res) => {
     });
   }
 };
-// Get Logged In User Orders
+
 exports.getMyOrders = async (req, res) => {
   try {
     const orders = await Order.find({
@@ -183,7 +174,7 @@ exports.getMyOrders = async (req, res) => {
   }
 };
 
-// Get Single Order
+
 exports.getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id)
@@ -204,7 +195,7 @@ exports.getOrderById = async (req, res) => {
   }
 };
 
-// Admin - Get All Orders
+
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()

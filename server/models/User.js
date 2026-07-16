@@ -8,10 +8,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minlength: [4, "Name must be at least 4 characters"],
       maxlength: [50, "Name cannot exceed 50 characters"],
-      match: [
-        /^[A-Za-z\s]+$/,
-        "Name can contain only letters and spaces",
-      ],
+      match: [/^[A-Za-z\s]+$/, "Name can contain only letters and spaces"],
     },
 
     email: {
@@ -48,7 +45,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("User", userSchema);

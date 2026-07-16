@@ -13,13 +13,13 @@ createRoot(document.getElementById("root")).render(
   <HelmetProvider>
     <Provider store={store}>
       <App />
-      // App.jsx ya jahan Toaster rakha hai
+     
 <Toaster 
   position="bottom-center" 
   toastOptions={{
     duration: 3000,
     style: {
-      marginBottom: '20px', // Page ke niche rahega, button se door
+      marginBottom: '20px', 
     },
   }} 
 />

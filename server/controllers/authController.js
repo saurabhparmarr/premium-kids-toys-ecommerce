@@ -39,7 +39,7 @@ exports.registerUser = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    // ✅ Matches loginUser's cookie exactly
+
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -172,14 +172,12 @@ exports.updateProfile = async (req, res) => {
       });
     }
 
-    // Validation
     if (!name || !email) {
       return res.status(400).json({
         message: "Name and Email are required",
       });
     }
 
-    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
@@ -188,7 +186,7 @@ exports.updateProfile = async (req, res) => {
       });
     }
 
-    // Check duplicate email
+    
     const existingUser = await User.findOne({
       email: email.trim().toLowerCase(),
       _id: { $ne: user._id },
@@ -200,7 +198,6 @@ exports.updateProfile = async (req, res) => {
       });
     }
 
-    // Update profile
     user.name = name.trim();
     user.email = email.trim().toLowerCase();
 

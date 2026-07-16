@@ -11,7 +11,6 @@ connectDB();
 
 const app = express();
 
-// Middlewares
 app.use(express.json());
 app.use(cookieParser());
 
@@ -19,10 +18,9 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 
-// Routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/products", require("./routes/productRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));

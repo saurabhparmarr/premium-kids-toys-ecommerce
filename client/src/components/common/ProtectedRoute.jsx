@@ -5,7 +5,6 @@ import Loader from "./Loader";
 const ProtectedRoute = () => {
   const { user, isInitializing } = useSelector((state) => state.auth);
 
-  // Jab tak verification pending hai, tab tak loader par hold rakho
   if (isInitializing) {
     return <Loader />;
   }

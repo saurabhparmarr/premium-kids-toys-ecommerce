@@ -1,13 +1,16 @@
 const Product = require("../models/Product");
-
 const mongoose = require("mongoose");
+
+/**
+ * @desc    Fetch products with filtering, searching, and pagination
+ * @route   GET /api/products
+ */
 const getProducts = async (req, res) => {
   try {
     const { keyword, category, minPrice, maxPrice, ageGroup } = req.query;
-
     let match = {};
 
-    // 1. Keyword Filter
+    // 1. Keyword Filter (Name-based search)
     if (keyword) {
       match.name = { $regex: keyword, $options: "i" };
     }
@@ -17,12 +20,12 @@ const getProducts = async (req, res) => {
       match.category = category;
     }
 
-    // 3. Age Group Filter (Regex fix: match karega chahe "3-5" ho ya "3-5 Years")
+    // 3. Age Group Filter (Regex to handle flexible strings like "3-5" or "3-5 Years")
     if (ageGroup && ageGroup !== "All" && ageGroup !== "") {
       match.ageGroup = { $regex: new RegExp(`^${ageGroup}`, "i") };
     }
 
-    // 4. Price Filtering Logic (Effective Price par)
+    // 4. Price Filtering Logic (Uses effective price: offerPrice if > 0, else base price)
     if (minPrice || maxPrice) {
       match.$expr = {
         $and: [
@@ -35,12 +38,12 @@ const getProducts = async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 8;
 
-    // 5. Total Count
+    // 5. Total Count for Pagination
     const countPipeline = [{ $match: match }, { $count: "total" }];
     const totalResult = await Product.aggregate(countPipeline);
     const totalProducts = totalResult.length > 0 ? totalResult[0].total : 0;
 
-    // 6. Products Fetching
+    // 6. Fetch paginated products sorted by newest first
     const products = await Product.aggregate([
       { $match: match },
       { $sort: { createdAt: -1 } },
@@ -54,14 +57,14 @@ const getProducts = async (req, res) => {
       pages: Math.ceil(totalProducts / limit),
       totalProducts,
     });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-
-
+/**
+ * @desc    Get a single product by ID
+ */
 const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -75,7 +78,9 @@ const getProductById = async (req, res) => {
   }
 };
 
-
+/**
+ * @desc    Get all unique product categories
+ */
 const getCategories = async (req, res) => {
   try {
     const categories = await Product.distinct("category");
@@ -85,11 +90,14 @@ const getCategories = async (req, res) => {
   }
 };
 
-
+/**
+ * @desc    Create a new product with auto-generated slug
+ */
 const createProduct = async (req, res) => {
   try {
     const { image, offerPrice, name, sku, ...rest } = req.body;
 
+    // Generate slug from product name
     const slug = name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
 
     const productData = {
@@ -100,16 +108,14 @@ const createProduct = async (req, res) => {
       offerPrice: offerPrice || 0,
     };
 
-    // Agar SKU input mein diya gaya hai tabhi save karo
     if (sku && sku.trim() !== "") {
       productData.sku = sku.trim();
     }
 
     const product = await Product.create(productData);
-
     res.status(201).json(product);
   } catch (error) {
-    // Duplicate key error 11000 ko handle karo
+    // Handle MongoDB duplicate key error (11000)
     if (error.code === 11000) {
       return res.status(400).json({ message: "Product with this SKU or Name already exists" });
     }
@@ -117,22 +123,22 @@ const createProduct = async (req, res) => {
   }
 };
 
-
-
+/**
+ * @desc    Update existing product details
+ */
 const updateProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    // Slug update yahan karo
+    // Update slug if product name changes
     if (req.body.name) {
       product.slug = req.body.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
     }
 
     product.name = req.body.name || product.name;
-    // ... baki fields update karo
+    // (Other fields would be updated here)
     
-    // Ab yahan save karo, koi error nahi aayega kyunki koi hook nahi hai
     const updated = await product.save();
     res.json(updated);
   } catch (error) {
@@ -140,7 +146,9 @@ const updateProduct = async (req, res) => {
   }
 };
 
-
+/**
+ * @desc    Delete a product by ID
+ */
 const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
@@ -154,18 +162,19 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-
+/**
+ * @desc    Fetch product using either ID or URL Slug
+ */
 const getProductByIdentifier = async (req, res) => {
   try {
     const { identifier } = req.params;
     let product;
 
-    // Check if the input is a valid MongoDB ObjectId
+    // First try ID, if not found, try by Slug
     if (mongoose.Types.ObjectId.isValid(identifier)) {
       product = await Product.findById(identifier);
     }
 
-    // If not found by ID, try searching by slug
     if (!product) {
       product = await Product.findOne({ slug: identifier });
     }
@@ -179,7 +188,6 @@ const getProductByIdentifier = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 module.exports = {
   getProducts,

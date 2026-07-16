@@ -19,7 +19,6 @@ const Dashboard = () => {
     dispatch(getUsersCount());
   }, [dispatch]);
 
-  // Yahan maine check kiya ki agar orders array hai, tabhi reduce chalega
   const revenue = Array.isArray(orders) 
     ? orders.reduce((sum, order) => sum + (Number(order.totalPrice) || 0), 0)
     : 0;
@@ -29,7 +28,7 @@ const Dashboard = () => {
       <DashboardCards
         products={products?.length || 0}
         orders={orders?.length || 0}
-        revenue={revenue} // Ab ye sahi number bhejega
+        revenue={revenue} 
         users={usersCount || 0}
       />
     </AdminLayout>

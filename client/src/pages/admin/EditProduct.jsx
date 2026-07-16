@@ -5,15 +5,19 @@ import toast from "react-hot-toast";
 
 import AdminLayout from "../../components/admin/AdminLayout";
 import ProductForm from "../../components/admin/forms/ProductForm";
+import Loader from "../../components/common/Loader";
 
-import { getProductByIdentifier, updateProduct } from "../../features/product/productThunk";
+import {
+  getProductByIdentifier,
+  updateProduct,
+} from "../../features/product/productThunk";
 
 const EditProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { product } = useSelector((state) => state.product);
+  const { product, loading } = useSelector((state) => state.product);
 
   useEffect(() => {
     dispatch(getProductByIdentifier(id));
@@ -28,20 +32,17 @@ const EditProduct = () => {
         })
       ).unwrap();
 
-      toast.success("Product Updated");
+      toast.success("Product updated successfully");
       navigate("/admin/products");
     } catch (err) {
-      toast.error(err);
+      toast.error(err || "Failed to update product");
     }
   };
 
-  if (!product) {
+  if (loading || !product) {
     return (
       <AdminLayout>
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-          <span className="ml-3 text-zinc-500 font-medium">Loading Product Data...</span>
-        </div>
+        <Loader message="Loading product data for editing..." />
       </AdminLayout>
     );
   }
@@ -49,18 +50,18 @@ const EditProduct = () => {
   return (
     <AdminLayout>
       <div className="max-w-4xl mx-auto py-6">
-        {/* Top Header */}
+        {/* Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-black text-zinc-950 tracking-tight">
+          <h1 className="text-3xl font-black tracking-tight text-zinc-950">
             Edit Product
           </h1>
-          <p className="text-zinc-500 text-sm mt-1">
-            Modify the necessary fields to update the toy's information in the database.
+          <p className="mt-1 text-sm text-zinc-500">
+            Modify the necessary fields to update the product information.
           </p>
         </div>
 
-        {/* Product Form Wrapper Card */}
-        <div className="bg-white border border-zinc-200/60 shadow-xl rounded-2xl p-6 md:p-8 transition-all">
+        {/* Form Card */}
+        <div className="rounded-2xl border border-zinc-200/60 bg-white p-6 shadow-xl md:p-8">
           <ProductForm
             initialData={product}
             onSubmit={submitHandler}

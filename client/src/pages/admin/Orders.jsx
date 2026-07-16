@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import AdminLayout from "../../components/admin/AdminLayout";
 import OrderTable from "../../components/admin/OrderTable";
+import Loader from "../../components/common/Loader"; 
 
 import { getAllOrders } from "../../features/order/orderThunk";
 
@@ -13,13 +14,12 @@ const Orders = () => {
     (state) => state.order
   );
 
-// Orders.jsx me
 useEffect(() => {
   dispatch(getAllOrders());
   
-  // Cleanup: Jab user is page se jaye, toh purana data saaf ho jaye
+  
   return () => {
-    dispatch({ type: 'order/clearOrders' }); // Ya tumhara jo bhi clear action ho
+    dispatch({ type: 'order/clearOrders' }); 
   };
 }, [dispatch]);
   return (
@@ -37,12 +37,9 @@ useEffect(() => {
 
         {/* Content Section */}
         {loading ? (
-          <div className="flex items-center justify-center min-h-[40vh] bg-white border border-zinc-200/60 rounded-2xl shadow-sm">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-            <span className="ml-3 text-zinc-500 font-medium">Fetching orders...</span>
-          </div>
+          <Loader message="Fetching all orders..." />
         ) : (
-          <div className="bg-white border border-zinc-200/60 shadow-xl rounded-2xl overflow-hidden transition-all">
+          <div className="bg-white border border-zinc-200/60 shadow-xl rounded-2xl overflow-hidden">
             <OrderTable orders={orders} />
           </div>
         )}

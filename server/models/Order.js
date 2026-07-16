@@ -116,13 +116,12 @@ const orderSchema = new mongoose.Schema(
 
     deliveryDate: {
       type: Date,
-      default: ()=>{
+      default: () => {
         const currentDate = new Date();
         const deliveryDate = new Date(currentDate);
         deliveryDate.setDate(currentDate.getDate() + 7);
         return deliveryDate;
-        
-      }
+      },
     },
   },
   {

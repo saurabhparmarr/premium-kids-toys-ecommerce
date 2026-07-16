@@ -4,18 +4,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
 
-import Loader from "../components/common/Loader";
+import Loader from "../components/common/Loader"; // Ensure your path is correct
 import Price from "../components/common/Price";
 import Rating from "../components/common/Rating";
 import Button from "../components/common/Button";
 
-// Apne thunk mein check kar lena, agar tumne getProductById banaya hai toh wo use karo
-// Agar sirf getProductBySlug hai, toh usme param 'id' pass kar do (backend handle kar lega)
 import { getProductByIdentifier } from "../features/product/productThunk"; 
 import { addToCart } from "../features/cart/cartSlice";
 
 const ProductDetails = () => {
-  const { id } = useParams(); // URL se ID utha rahe hain
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,11 +27,13 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
-    // API call mein ID pass ho rahi hai
     dispatch(getProductByIdentifier(id));
   }, [dispatch, id]);
 
-  if (loading) return <Loader />;
+  // Dynamic Loader implementation
+  if (loading) {
+    return <Loader message="Fetching product details..." />;
+  }
 
   if (error) {
     return (
@@ -55,12 +55,18 @@ const ProductDetails = () => {
 
   return (
     <section className="min-h-screen px-4 py-12">
-      <Helmet><title>{product.name}</title></Helmet>
+      <Helmet>
+        <title>{product.name || "Product Details"}</title>
+      </Helmet>
       
       <div className="mx-auto max-w-7xl rounded-[2rem] border border-orange-100 bg-white p-6 shadow-lg sm:p-10">
         <div className="grid items-start gap-10 lg:grid-cols-2">
           <div className="flex items-center justify-center rounded-[1.75rem] bg-orange-50/30 p-4">
-            <img src={product.images?.[0]} alt={product.name} className="max-h-[500px] object-contain" />
+            <img 
+              src={product.images?.[0] || "https://placehold.co/400x400?text=Toy"} 
+              alt={product.name} 
+              className="max-h-[500px] object-contain" 
+            />
           </div>
 
           <div className="flex flex-col">

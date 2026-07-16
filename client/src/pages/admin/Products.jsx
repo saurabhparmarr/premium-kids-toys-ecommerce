@@ -1,16 +1,17 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom"; // useNavigate import kiya
-import { ArrowLeft, Plus } from "lucide-react"; // ArrowLeft import kiya
+import { Link, useNavigate } from "react-router-dom"; 
+import { ArrowLeft, Plus } from "lucide-react"; 
 import toast from "react-hot-toast";
+import Loader from "../../components/common/Loader";
 
 import ProductTable from "../../components/admin/ProductTable";
 import { getProducts, deleteProduct } from "../../features/product/productThunk";
-import AdminLayout from "../../components/admin/AdminLayout"; // Layout import kiya
+import AdminLayout from "../../components/admin/AdminLayout"; 
 
 const Products = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Navigation hook
+  const navigate = useNavigate(); 
 
   const { products, loading } = useSelector((state) => state.product);
 
@@ -59,16 +60,13 @@ const Products = () => {
         </div>
 
         {/* Content Section */}
-        {loading ? (
-          <div className="flex flex-col items-center justify-center min-h-[45vh] bg-white border border-zinc-200/60 rounded-2xl shadow-sm">
-            <div className="animate-spin rounded-full h-9 w-9 border-b-2 border-indigo-600"></div>
-            <span className="ml-3 text-zinc-500 font-medium mt-3 text-sm">Synchronizing live inventory...</span>
-          </div>
-        ) : (
-          <div className="bg-white border border-zinc-200/60 shadow-xl rounded-2xl overflow-hidden">
-            <ProductTable products={products} onDelete={handleDelete} />
-          </div>
-        )}
+       {loading ? (
+        <Loader message="Synchronizing live inventory..." />
+      ) : (
+        <div className="bg-white border border-zinc-200/60 shadow-xl rounded-2xl overflow-hidden">
+          <ProductTable products={products} onDelete={handleDelete} />
+        </div>
+      )}
       </div>
     </AdminLayout>
   );

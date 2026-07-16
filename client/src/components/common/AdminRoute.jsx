@@ -9,7 +9,6 @@ const AdminRoute = () => {
     return <Loader />;
   }
 
-  // Check user exists and has admin privileges
   return user && user.role === "admin" ? (
     <Outlet />
   ) : (

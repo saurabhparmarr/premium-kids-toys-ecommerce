@@ -26,7 +26,7 @@ const AddProduct = () => {
   return (
     <AdminLayout>
       <div className="max-w-4xl mx-auto py-6">
-        {/* Top Header */}
+        
         <div className="mb-6">
           <h1 className="text-3xl font-black text-zinc-950 tracking-tight">
             Add New Product
@@ -36,7 +36,7 @@ const AddProduct = () => {
           </p>
         </div>
 
-        {/* Product Form Wrapper Card */}
+        
         <div className="bg-white border border-zinc-200/60 shadow-xl rounded-2xl p-6 md:p-8 transition-all">
           <ProductForm onSubmit={handleSubmit} />
         </div>

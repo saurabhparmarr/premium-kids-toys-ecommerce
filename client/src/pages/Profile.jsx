@@ -28,7 +28,7 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    e.stopPropagation(); // Ye event bubbling rokta hai
+    e.stopPropagation(); 
 
   if (loading) return;
 
@@ -43,8 +43,7 @@ const Profile = () => {
       toast.success("Profile updated successfully", { id: "profile-toast" });
       setIsEditing(false);
     } catch (error) {
-      // FIX: Yahan ID add ki hai taaki duplicate toast na aaye
-      // Aur error object se message nikala hai
+      
       const errorMessage = typeof error === 'string' ? error : (error?.message || "Something went wrong");
       toast.error(errorMessage, { id: "profile-toast" });
     }
@@ -86,7 +85,7 @@ const Profile = () => {
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button type="submit" disabled={loading} className="flex-1 py-3">{loading ? "Saving..." : "Save Changes"}</Button>
              <Button 
-  type="button" // <--- Ye "button" hi hona chahiye
+  type="button"
   onClick={() => { setName(user.name); setEmail(user.email); setIsEditing(false); }} 
   className="flex-1 bg-zinc-200 text-zinc-800 hover:bg-zinc-300"
 >

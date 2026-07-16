@@ -2,13 +2,19 @@ import { Link } from "react-router-dom";
 import { Heart, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Button from "../components/common/Button";
+import Loader from "../components/common/Loader"; 
 
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("wishlist")) || [];
-    setWishlist(data);
+    
+    setTimeout(() => {
+      const data = JSON.parse(localStorage.getItem("wishlist")) || [];
+      setWishlist(data);
+      setLoading(false);
+    }, 500); 
   }, []);
 
   const removeWishlist = (id) => {
@@ -17,6 +23,12 @@ const Wishlist = () => {
     localStorage.setItem("wishlist", JSON.stringify(updated));
   };
 
+  // 1. Loading UI
+  if (loading) {
+    return <Loader message="Loading your favorites..." />;
+  }
+
+  // 2. Empty UI
   if (wishlist.length === 0) {
     return (
       <div className="mx-auto mt-10 max-w-7xl rounded-[2rem] border border-orange-100 bg-white/90 px-6 py-20 text-center shadow-[0_20px_50px_rgba(15,23,42,0.06)] sm:px-8">
@@ -34,6 +46,7 @@ const Wishlist = () => {
     );
   }
 
+  // 3. Wishlist Content UI
   return (
     <section className="min-h-screen px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -63,11 +76,9 @@ const Wishlist = () => {
                 </div>
 
                 <div className="mt-5 flex gap-2.5">
-                  {/* Yahan maine logic fix kar diya hai */}
                   <Link to={`/product/${product._id}`} className="flex-1">
-   <Button className="w-full py-2.5">View Details</Button>
-</Link>
-
+                    <Button className="w-full py-2.5">View Details</Button>
+                  </Link>
                   <button
                     onClick={() => removeWishlist(product._id)}
                     className="flex items-center justify-center rounded-xl border border-orange-100 bg-orange-50 px-3.5 text-zinc-500 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 active:scale-95"

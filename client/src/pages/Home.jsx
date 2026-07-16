@@ -75,7 +75,7 @@ const Home = () => {
           <CategoryFilter selected={category} onSelect={setCategory} />
         </div>
 
-        {/* Product Grid Area ... (Keep as it is) */}
+       
         {loading ? <SkeletonGrid /> : <ProductGrid products={products} />}
         
         <div className="flex justify-center pt-8">
