@@ -29,13 +29,17 @@ const EditProduct = () => {
         updateProduct({
           id,
           productData: data,
+
+          config: { skipErrorToast: true } 
         })
       ).unwrap();
 
       toast.success("Product updated successfully");
       navigate("/admin/products");
     } catch (err) {
-      // Interceptor handle karega, yahan toast hat gaya hai.
+     
+      const errorMessage = err?.message || "Failed to update product";
+      toast.error(errorMessage); 
     }
   };
 
