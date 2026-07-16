@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin: ["https://premium-kids-toys-ecommerce.vercel.app"], 
+  origin: ["https://premium-kids-toys-ecommerce-saurabh-singhs-projects-4cbb1c3b.vercel.app"], 
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
