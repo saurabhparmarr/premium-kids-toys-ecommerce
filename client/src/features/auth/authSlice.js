@@ -44,7 +44,7 @@ const authSlice = createSlice({
       .addCase(updateProfile.fulfilled, (state, action) => { state.loading = false; state.user = action.payload; })
       .addCase(updateProfile.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
 
-      // Users Count
+  
       .addCase(getUsersCount.fulfilled, (state, action) => { state.usersCount = action.payload.count; })
       
       // Logout

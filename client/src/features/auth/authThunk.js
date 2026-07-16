@@ -8,7 +8,6 @@ import {
   updateProfileAPI,
 } from "./authAPI";
 
-// Ab sabhi thunks mein 1st argument `{ userData, config }` hoga
 export const registerUser = createAsyncThunk(
   "auth/register",
   async ({ userData, config }, { rejectWithValue }) => {
@@ -40,9 +39,8 @@ export const getProfile = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getProfileAPI();
-      return response.data;
+      return response; 
     } catch (error) {
-      // 401 ka matlab hai banda logged-out hai, error mat dikhao
       if (error.response?.status === 401) {
         return rejectWithValue(null); 
       }
