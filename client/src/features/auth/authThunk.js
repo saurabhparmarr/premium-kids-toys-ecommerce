@@ -37,18 +37,16 @@ export const loginUser = createAsyncThunk(
 
 export const getProfile = createAsyncThunk(
   "auth/profile",
-  async (config = {}, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      return await getProfileAPI(config);
+      const response = await getProfileAPI();
+      return response.data;
     } catch (error) {
-      // FIX: Agar 401 error hai, toh ise 'error' mat maano, 
-      // sirf null return karo taaki popup na aaye.
+      // 401 ka matlab hai banda logged-out hai, error mat dikhao
       if (error.response?.status === 401) {
         return rejectWithValue(null); 
       }
-      return rejectWithValue(
-        error.response?.data?.message || "Profile fetch failed"
-      );
+      return rejectWithValue(error.response?.data?.message || "Auth failed");
     }
   }
 );
