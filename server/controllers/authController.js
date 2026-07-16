@@ -137,15 +137,15 @@ exports.getProfile = async (req, res) => {
 exports.logoutUser = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none", 
+    path:'/',
   });
 
   res.status(200).json({
     message: "Logged out successfully",
   });
 };
-
 exports.getUsersCount = async (req, res) => {
   try {
     const count = await User.countDocuments();
