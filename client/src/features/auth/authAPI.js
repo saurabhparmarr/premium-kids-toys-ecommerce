@@ -1,39 +1,32 @@
 import api from "../../api/axios";
 
-
-export const registerAPI = async (userData) => {
-  const response = await api.post("/auth/register", userData);
+// Har function mein 'config' ka default value {} rakha hai
+export const registerAPI = async (userData, config = {}) => {
+  const response = await api.post("/auth/register", userData, config);
   return response.data;
 };
 
-
-export const loginAPI = async (userData) => {
-  const response = await api.post("/auth/login", userData);
+export const loginAPI = async (userData, config = {}) => {
+  const response = await api.post("/auth/login", userData, config);
   return response.data;
 };
 
-
-export const getProfileAPI = async () => {
-  const response = await api.get("/auth/profile", {
-    skipErrorToast: true,
-    skipAuthRedirect: true,
-  });
+export const getProfileAPI = async (config = { skipErrorToast: true, skipAuthRedirect: true }) => {
+  const response = await api.get("/auth/profile", config);
   return response.data;
 };
 
-
-export const logoutAPI = async () => {
-  const response = await api.post("/auth/logout");
+export const logoutAPI = async (config = {}) => {
+  const response = await api.post("/auth/logout", {}, config);
   return response.data;
 };
 
-// Example check agar tum axios use kar rahe ho to:
-export const getUsersCountAPI = async () => {
-  const response = await api.get("/auth/count"); // Apne backend ka sahi route url dena yahan
+export const getUsersCountAPI = async (config = {}) => {
+  const response = await api.get("/auth/count", config);
   return response.data;
 };
 
-export const updateProfileAPI = async (userData) => {
-  const response = await api.put("/auth/profile", userData);
+export const updateProfileAPI = async (userData, config = {}) => {
+  const response = await api.put("/auth/profile", userData, config);
   return response.data;
 };

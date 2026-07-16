@@ -8,7 +8,6 @@ import { updateProfile } from "../features/auth/authThunk";
 
 const Profile = () => {
   const dispatch = useDispatch();
-
   const { user, loading } = useSelector((state) => state.auth);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -28,22 +27,22 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    e.stopPropagation(); 
+    e.stopPropagation();
 
-  if (loading) return;
+    if (loading) return;
 
     try {
+      // Yahan hum config pass kar rahe hain taaki double toast na aaye
       await dispatch(
         updateProfile({
-          name,
-          email,
+          userData: { name, email },
+          config: { skipErrorToast: true },
         })
       ).unwrap();
 
       toast.success("Profile updated successfully", { id: "profile-toast" });
       setIsEditing(false);
     } catch (error) {
-      
       const errorMessage = typeof error === 'string' ? error : (error?.message || "Something went wrong");
       toast.error(errorMessage, { id: "profile-toast" });
     }
@@ -66,17 +65,34 @@ const Profile = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="mb-2 block text-sm font-semibold text-zinc-700">Full Name</label>
-            <input type="text" disabled={!isEditing} value={name} onChange={(e) => setName(e.target.value)} className="w-full rounded-2xl border border-orange-100 bg-orange-50/40 p-3 text-zinc-900 transition disabled:bg-zinc-100" />
+            <input 
+              type="text" 
+              disabled={!isEditing} 
+              value={name} 
+              onChange={(e) => setName(e.target.value)} 
+              className="w-full rounded-2xl border border-orange-100 bg-orange-50/40 p-3 text-zinc-900 transition disabled:bg-zinc-100" 
+            />
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-zinc-700">Email</label>
-            <input type="email" disabled={!isEditing} value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded-2xl border border-orange-100 bg-orange-50/40 p-3 text-zinc-900 transition disabled:bg-zinc-100" />
+            <input 
+              type="email" 
+              disabled={!isEditing} 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              className="w-full rounded-2xl border border-orange-100 bg-orange-50/40 p-3 text-zinc-900 transition disabled:bg-zinc-100" 
+            />
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-zinc-700">Account Role</label>
-            <input type="text" disabled value={user.role} className="w-full rounded-2xl border border-orange-100 bg-zinc-100 p-3 capitalize text-zinc-700" />
+            <input 
+              type="text" 
+              disabled 
+              value={user.role} 
+              className="w-full rounded-2xl border border-orange-100 bg-zinc-100 p-3 capitalize text-zinc-700" 
+            />
           </div>
 
           {!isEditing ? (
@@ -84,13 +100,13 @@ const Profile = () => {
           ) : (
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button type="submit" disabled={loading} className="flex-1 py-3">{loading ? "Saving..." : "Save Changes"}</Button>
-             <Button 
-  type="button"
-  onClick={() => { setName(user.name); setEmail(user.email); setIsEditing(false); }} 
-  className="flex-1 bg-zinc-200 text-zinc-800 hover:bg-zinc-300"
->
-  Cancel
-</Button>
+              <Button 
+                type="button"
+                onClick={() => { setName(user.name); setEmail(user.email); setIsEditing(false); }} 
+                className="flex-1 bg-zinc-200 text-zinc-800 hover:bg-zinc-300"
+              >
+                Cancel
+              </Button>
             </div>
           )}
         </form>

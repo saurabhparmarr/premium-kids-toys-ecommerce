@@ -33,7 +33,7 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const email = formData.email.trim().toLowerCase();
@@ -44,21 +44,22 @@ const Login = () => {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailRegex.test(email)) {
       return toast.error("Please enter a valid email address");
     }
 
-    if (password.length < 6) {
-      return toast.error("Password must be at least 6 characters");
+    try {
+      // Config bhej rahe hain taaki interceptor toast na dikhaye
+      // Aur sirf yahan se error control ho
+      await dispatch(
+        loginUser({
+          userData: { email, password },
+          config: { skipErrorToast: true },
+        })
+      ).unwrap();
+    } catch (error) {
+      toast.error(error || "Login failed");
     }
-
-    dispatch(
-      loginUser({
-        email,
-        password,
-      })
-    );
   };
 
   if (loading) {
