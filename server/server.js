@@ -13,11 +13,13 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-
 app.use(cors({
-  origin: ["http://localhost:5173", "https://premium-kids-toys-ecommerce.vercel.app"], // Dono URLs allow kar do
+  origin: [
+    "http://localhost:5173", 
+    "https://premium-kids-toys-ecommerce-hheq.vercel.app" 
+  ], 
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true // Session/Cookie ke liye zaroori hai
+  credentials: true
 }));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/products", require("./routes/productRoutes"));
