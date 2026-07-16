@@ -14,13 +14,11 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-  }),
-);
-
+app.use(cors({
+  origin: ["https://premium-kids-toys-ecommerce.vercel.app"], 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/products", require("./routes/productRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
