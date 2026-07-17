@@ -20,11 +20,14 @@ export const createProduct = createAsyncThunk(
 );
 
 // Update Product
+// Update Product
 export const updateProduct = createAsyncThunk(
   "product/update",
-  async ({ id, productData }, { rejectWithValue }) => {
+  // 'config' ko yahan receive karo
+  async ({ id, productData, config }, { rejectWithValue }) => {
     try {
-      return await updateProductAPI(id, productData);
+      // 'config' ko yahan pass karo
+      return await updateProductAPI(id, productData, config);
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Failed to update product");
     }
