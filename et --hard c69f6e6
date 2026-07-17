@@ -1,9 +1,0 @@
-[33ma5d929c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m fix: double toast problem
-[33mc69f6e6[m fix: double toast problem
-[33m1ef8468[m fix
-[33m55803d4[m fix: updated cookie settings for cross-origin
-[33m572eb36[m fix: updated cookie settings for cross-origin
-[33m022e3ab[m fix: added vercel.json for SPA routing
-[33m5f9b895[m fix: updated cors and api routes for production
-[33m56cbece[m feat: updated all pages with dynamic loaders
-[33me85c421[m Initial commit - Premium Kids Toys Ecommerce
