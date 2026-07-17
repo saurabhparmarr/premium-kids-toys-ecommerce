@@ -49,8 +49,7 @@ const Login = () => {
     }
 
     try {
-      // Config bhej rahe hain taaki interceptor toast na dikhaye
-      // Aur sirf yahan se error control ho
+     
       await dispatch(
         loginUser({
           userData: { email, password },
@@ -58,10 +57,10 @@ const Login = () => {
         })
       ).unwrap();
     } catch (error) {
-      toast.error(error || "Login failed");
-    }
+  toast.error(error || "Login failed");
+  setFormData((prev) => ({ ...prev, password: "" }));
+}
   };
-
   if (loading) {
     return <Loader message="Authenticating, please wait..." />;
   }
