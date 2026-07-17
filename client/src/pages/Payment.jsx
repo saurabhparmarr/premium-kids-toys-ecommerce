@@ -88,6 +88,16 @@ const Payment = () => {
         theme: {
           color: "#f97316",
         },
+
+        // UPI hide kiya hai kyunki Razorpay test account pe UPI activation/KYC
+        // pending hai — mobile pe UPI-intent auto-trigger hone se
+        // "validate/account" 500 error aa raha tha. KYC complete hone ke
+        // baad ye block hata sakte ho taaki UPI bhi available ho jaaye.
+        config: {
+          display: {
+            hide: [{ method: "upi" }],
+          },
+        },
       };
 
       const razorpay = new window.Razorpay(options);
