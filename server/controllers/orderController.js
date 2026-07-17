@@ -39,11 +39,11 @@ itemsPrice += price * item.quantity;
     const taxPrice = Number((itemsPrice * 0.18).toFixed(2));
     const totalPrice = itemsPrice + shippingPrice + taxPrice;
 
-    const razorpayOrder = await razorpay.orders.create({
-      amount: totalPrice * 100,
-      currency: "INR",
-      receipt: `receipt_${Date.now()}`,
-    });
+ const razorpayOrder = await razorpay.orders.create({
+  amount: Math.round(totalPrice * 100),
+  currency: "INR",
+  receipt: `receipt_${Date.now()}`,
+});
 
     res.json({
       razorpayOrder,
