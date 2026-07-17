@@ -13,12 +13,37 @@ exports.registerUser = async (req, res) => {
     const { name, password } = req.body;
     const email = req.body.email?.trim().toLowerCase();
 
+    // Required Fields
     if (!name || !email || !password) {
       return res.status(400).json({
         message: "Please fill all required fields",
       });
     }
 
+    // Name Validation
+    if (name.trim().length < 3) {
+      return res.status(400).json({
+        message: "Name must be at least 3 characters long",
+      });
+    }
+
+    // Password Validation
+    if (password.length < 6) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters long",
+      });
+    }
+
+    // Email Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        message: "Please enter a valid email",
+      });
+    }
+
+    // Existing User Check
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -27,19 +52,22 @@ exports.registerUser = async (req, res) => {
       });
     }
 
+    // Hash Password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Create User
     const user = await User.create({
-      name,
+      name: name.trim(),
       email,
       password: hashedPassword,
       role: "user",
     });
 
+    // Generate Token
     const token = generateToken(user._id);
 
-
+    // Cookie
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,

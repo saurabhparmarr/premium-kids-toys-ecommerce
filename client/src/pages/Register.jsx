@@ -35,33 +35,43 @@ const Register = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const { name, email, password, confirmPassword } = formData;
-    const trimmedName = name.trim();
-    const trimmedEmail = email.trim().toLowerCase();
+  const { name, email, password, confirmPassword } = formData;
+  const trimmedName = name.trim();
+  const trimmedEmail = email.trim().toLowerCase();
 
-    // Basic Validations
-    if (!trimmedName || !trimmedEmail || !password || !confirmPassword) {
-      return toast.error("Please fill all fields");
-    }
-    if (password !== confirmPassword) {
-      return toast.error("Passwords do not match");
-    }
+  // Basic Validations
+  if (!trimmedName || !trimmedEmail || !password || !confirmPassword) {
+    return toast.error("Please fill all fields");
+  }
 
-    try {
-      // Config bheja taaki Interceptor double toast na dikhaye
-      await dispatch(
-        registerUser({
-          userData: { name: trimmedName, email: trimmedEmail, password },
-          config: { skipErrorToast: true },
-        })
-      ).unwrap();
-    } catch (error) {
-      toast.error(error || "Registration failed");
-    }
-  };
+  if (password.length < 6) {
+    return toast.error("Password must be at least 6 characters long");
+  }
+
+  if (password !== confirmPassword) {
+    return toast.error("Passwords do not match");
+  }
+
+  try {
+    await dispatch(
+      registerUser({
+        userData: {
+          name: trimmedName,
+          email: trimmedEmail,
+          password,
+        },
+        config: {
+          skipErrorToast: true,
+        },
+      })
+    ).unwrap();
+  } catch (error) {
+    toast.error(error || "Registration failed");
+  }
+};
 
   if (loading) {
     return <Loader message="Creating your account..." />;

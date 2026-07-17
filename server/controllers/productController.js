@@ -1,10 +1,7 @@
 const Product = require("../models/Product");
 const mongoose = require("mongoose");
 
-/**
- * @desc    Fetch products with filtering, searching, and pagination
- * @route   GET /api/products
- */
+
 const getProducts = async (req, res) => {
   try {
     const { keyword, category, minPrice, maxPrice, ageGroup } = req.query;
