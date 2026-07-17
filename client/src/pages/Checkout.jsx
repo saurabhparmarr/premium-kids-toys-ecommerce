@@ -40,20 +40,84 @@ const Checkout = () => {
   }, [cartItems, navigate]);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    
-   
-    if (!formData.fullName || !formData.address || !formData.phone) {
-      toast.error("Please fill all fields");
-      return;
-    }
+  e.preventDefault();
 
-    
-    dispatch(saveShippingAddress(formData));
-    
-    
-    navigate("/payment");
-  };
+  const {
+    fullName,
+    phone,
+    address,
+    city,
+    state,
+    postalCode,
+  } = formData;
+
+  // Trim values
+  const trimmedName = fullName.trim();
+  const trimmedPhone = phone.trim();
+  const trimmedAddress = address.trim();
+  const trimmedCity = city.trim();
+  const trimmedState = state.trim();
+  const trimmedPostalCode = postalCode.trim();
+
+  // Empty fields
+  if (
+    !trimmedName ||
+    !trimmedPhone ||
+    !trimmedAddress ||
+    !trimmedCity ||
+    !trimmedState ||
+    !trimmedPostalCode
+  ) {
+    return toast.error("Please fill all fields");
+  }
+
+  // Name validation
+  if (trimmedName.length < 4) {
+    return toast.error("Full name must be at least 4 characters");
+  }
+
+  if (!/^[A-Za-z\s]+$/.test(trimmedName)) {
+    return toast.error("Full name can contain only letters and spaces");
+  }
+
+  // Phone validation
+  if (!/^[6-9]\d{9}$/.test(trimmedPhone)) {
+    return toast.error("Please enter a valid 10-digit mobile number");
+  }
+
+  // Address validation
+  if (trimmedAddress.length < 10) {
+    return toast.error("Address must be at least 10 characters");
+  }
+
+  // City validation
+  if (!/^[A-Za-z\s]+$/.test(trimmedCity)) {
+    return toast.error("City can contain only letters");
+  }
+
+  // State validation
+  if (!/^[A-Za-z\s]+$/.test(trimmedState)) {
+    return toast.error("State can contain only letters");
+  }
+
+  // Postal Code validation
+  if (!/^\d{6}$/.test(trimmedPostalCode)) {
+    return toast.error("Postal code must be exactly 6 digits");
+  }
+
+  dispatch(
+    saveShippingAddress({
+      fullName: trimmedName,
+      phone: trimmedPhone,
+      address: trimmedAddress,
+      city: trimmedCity,
+      state: trimmedState,
+      postalCode: trimmedPostalCode,
+    })
+  );
+
+  navigate("/payment");
+};
 
   return (
     <section className="min-h-screen px-4 py-12">
