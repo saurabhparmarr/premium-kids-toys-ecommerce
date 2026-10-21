@@ -2,8 +2,8 @@
 
 A full-stack MERN ecommerce application built for a kids' toys store, developed as part of a technical assignment for **Aurus IT Solutions**. The project covers the complete customer journey — browsing, cart, wishlist, checkout, and payment — along with authentication and order management.
 
-**Live Demo:** https://premium-kids-toys-ecommerce-hheq.vercel.app
-**Backend API:** https://premium-kids-toys-ecommerce-1.onrender.com
+**Live Demo:** https://premium-kids-toys-ecommerce.vercel.app
+**Backend API:** https://premium-kids-toys-ecommerce.onrender.com
 
 ---
 
@@ -154,11 +154,17 @@ RAZORPAY_KEY_ID=<your_razorpay_key_id>
 RAZORPAY_KEY_SECRET=<your_razorpay_key_secret>
 ```
 
-**Client (`client/.env`)**
+**Client (`client/.env` and Vercel project environment variables)**
 ```
-VITE_API_URL=<backend_deployed_url>/api
+VITE_API_URL=https://premium-kids-toys-ecommerce.onrender.com/api
 VITE_RAZORPAY_KEY_ID=<your_razorpay_key_id>
 ```
+
+`VITE_API_URL` is public frontend configuration, not a secret. The production
+backend URL above is used as the production fallback; set the same value in
+Vercel and redeploy if the project already has a different `VITE_API_URL`.
+Keep MongoDB credentials, JWT secrets, and Razorpay secret keys on the backend
+only.
 
 ---
 

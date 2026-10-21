@@ -10,14 +10,13 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.set("trust proxy", 1); 
+app.set("trust proxy", 1);
 
-app.use(express.json());
-app.use(cookieParser());
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
+      "https://premium-kids-toys-ecommerce.vercel.app",
       "https://premium-kids-toys-ecommerce-hheq.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -25,6 +24,9 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/products", require("./routes/productRoutes"));
